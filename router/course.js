@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Course = require("../models/course");
 const jwt = require("jsonwebtoken");
+const isAdmin = require("../middleware/isAdmin");
 
 function verifyToken(req, res, next) {
   const authHeader = req.headers["authorization"];
@@ -45,7 +46,7 @@ router.get("/api/courses", (req, res) => {
     });
 });
 
-router.post("/api/courses", verifyToken, async (req, res) => {
+router.post("/api/courses", verifyToken, isAdmin, async (req, res) => {
   try {
     const { title, description, price, category } = req.body;
 
@@ -77,7 +78,7 @@ router.post("/api/courses", verifyToken, async (req, res) => {
 });
 
 /* DELETE — حذف كورس (محتاج توكن) */
-router.delete("/api/courses/:id", verifyToken, async (req, res) => {
+router.delete("/api/courses/:id", verifyToken, isAdmin, async (req, res) => {
   try {
     const course = await Course.findByIdAndDelete(req.params.id);
 

@@ -80,16 +80,17 @@ router.post("/api/auth/login", async (req, res) => {
       {
         userid: user._id,
         email: user.email,
+        isAdmin: user.isAdmin || false, // ⭐ ضيف السطر ده
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" },
     );
-
     // ⚠️ الواجهة مستنية token و name بالأسماء دي بالظبط
     res.json({
       success: true,
       token: token,
       name: user.name,
+      isAdmin: user.isAdmin || false, // ⭐
     });
   } catch (error) {
     console.log(error);
